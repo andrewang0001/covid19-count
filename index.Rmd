@@ -54,17 +54,11 @@ plot_for_state <- function(total, province) {
 ```{r}
 plot_for_state(total, "Australian Capital Territory")
 ```
-### Western Australia
+
+### New South Wales
 
 ```{r}
-# WA cases
-perth <- filter(total, `Province/State` == "Western Australia" & `Country/Region` == "Australia")
-perth <- select(perth, Date, current, deaths, recovered)
-perth.xts <- xts(select(perth, current, deaths, recovered), order.by=perth$Date)
-dygraph(perth.xts) %>% dyHighlight() %>% dyOptions(stackedGraph=T) %>%
-  dyEvent("2020-3-10", "COVID clinic RPH, SCGH, FSH", labelLoc="bottom") %>%
-  dyEvent("2020-3-18", "Indoor gatherings banned", labelLoc="bottom") %>%
-  dyEvent("2020-3-19", "COVID clinic Bunbury; Aus border closure", labelLoc="bottom")
+plot_for_state(total, "New South Wales")
 ```
 
 ### Northern Territory
@@ -74,11 +68,8 @@ dygraph(perth.xts) %>% dyHighlight() %>% dyOptions(stackedGraph=T) %>%
 plot_for_state(total, "Northern Territory")
 ```
 
-### South Australia
 
-```{r}
-plot_for_state(total, "South Australia")
-```
+
 
 ### Queensland
 
@@ -86,10 +77,16 @@ plot_for_state(total, "South Australia")
 plot_for_state(total, "Queensland")
 ```
 
-### New South Wales
+### South Australia
 
 ```{r}
-plot_for_state(total, "New South Wales")
+plot_for_state(total, "South Australia")
+```
+
+
+### Tasmania
+```{r}
+plot_for_state(total, "Tasmania")
 ```
 
 ### Victoria
@@ -97,9 +94,13 @@ plot_for_state(total, "New South Wales")
 plot_for_state(total, "Victoria")
 ```
 
-### Tasmania
+### Western Australia
+
 ```{r}
-plot_for_state(total, "Tasmania")
+plot_for_state(total, "Western Australia") %>%
+  dyEvent("2020-3-10", "COVID clinic RPH, SCGH, FSH", labelLoc="bottom") %>%
+  dyEvent("2020-3-18", "Indoor gatherings banned", labelLoc="bottom") %>%
+  dyEvent("2020-3-19", "COVID clinic Bunbury; Aus border closure", labelLoc="bottom")
 ```
 
 ### Current cases in Australia
@@ -108,5 +109,5 @@ australia <- filter(total, `Country/Region`=="Australia")
 australia <- select(australia, Date, `Province/State`, current)
 australia <- spread(australia, `Province/State`, current)
 australia.xts <- xts(australia[, -1], order.by=australia$Date)
-dygraph(australia.xts) %>% dyOptions(stackedGraph=T) %>% dyHighlight()
+dygraph_settings(australia.xts)
 ```
