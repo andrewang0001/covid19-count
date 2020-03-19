@@ -4,7 +4,6 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
-    storyboard: true
 ---
 
 An illustration of the number of current COVID-19 cases in Australia,
@@ -50,17 +49,23 @@ plot_for_state <- function(total, province) {
 ```
 
 -----------------------------------------------------------------------
+
+ACT
+================================
+
 ### Australian Capital Territory
 ```{r}
 plot_for_state(total, "Australian Capital Territory")
 ```
-
+NSW
+================================
 ### New South Wales
 
 ```{r}
 plot_for_state(total, "New South Wales")
 ```
-
+ACT
+================================
 ### Northern Territory
 
 ```{r}
@@ -68,8 +73,8 @@ plot_for_state(total, "New South Wales")
 plot_for_state(total, "Northern Territory")
 ```
 
-
-
+QLD
+================================
 
 ### Queensland
 
@@ -77,23 +82,32 @@ plot_for_state(total, "Northern Territory")
 plot_for_state(total, "Queensland")
 ```
 
+SA
+================================
 ### South Australia
 
 ```{r}
 plot_for_state(total, "South Australia")
 ```
 
+TAS
+================================
 
 ### Tasmania
 ```{r}
 plot_for_state(total, "Tasmania")
 ```
 
+VIC
+================================
+
 ### Victoria
 ```{r}
 plot_for_state(total, "Victoria")
 ```
 
+WA
+================================
 ### Western Australia
 
 ```{r}
@@ -103,6 +117,8 @@ plot_for_state(total, "Western Australia") %>%
   dyEvent("2020-3-19", "COVID clinic Bunbury; Aus border closure", labelLoc="bottom")
 ```
 
+All current cases
+================================
 ### Current cases in Australia
 ```{r}
 australia <- filter(total, `Country/Region`=="Australia")
