@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    storyboard: true
 ---
 
 An illustration of the number of current COVID-19 cases in Australia,
@@ -35,11 +36,25 @@ total <- full_join(total, recovered, suffix=c("", "recovered"), by=join.by)
 # Calculate the total number of current cases at a particular date
 total <- mutate(total, current=confirmed-deaths-recovered)
 #total.xts <- xts(total, order.by=total$Date)
+
+dygraph_settings <- function(xts, ...) {
+  dygraph(xts, ...) %>% dyHighlight() %>% dyOptions(stackedGraph=T)
+}
+
+plot_for_state <- function(total, province) {
+  dat <- filter(total, `Province/State` == province & `Country/Region` == "Australia")
+  dat <- select(dat, Date, current, deaths, recovered)
+  dat.xts <- xts(select(dat, current,deaths,recovered), order.by=dat$Date)
+  dygraph_settings(dat.xts)
+}
 ```
 
 -----------------------------------------------------------------------
-
-### Cases in Western Australia
+### Australian Capital Territory
+```{r}
+plot_for_state(total, "Australian Capital Territory")
+```
+### Western Australia
 
 ```{r}
 # WA cases
@@ -52,6 +67,40 @@ dygraph(perth.xts) %>% dyHighlight() %>% dyOptions(stackedGraph=T) %>%
   dyEvent("2020-3-19", "COVID clinic Bunbury; Aus border closure", labelLoc="bottom")
 ```
 
+### Northern Territory
+
+```{r}
+
+plot_for_state(total, "Northern Territory")
+```
+
+### South Australia
+
+```{r}
+plot_for_state(total, "South Australia")
+```
+
+### Queensland
+
+```{r}
+plot_for_state(total, "Queensland")
+```
+
+### New South Wales
+
+```{r}
+plot_for_state(total, "New South Wales")
+```
+
+### Victoria
+```{r}
+plot_for_state(total, "Victoria")
+```
+
+### Tasmania
+```{r}
+plot_for_state(total, "Tasmania")
+```
 
 ### Current cases in Australia
 ```{r}
