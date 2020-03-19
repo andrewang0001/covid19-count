@@ -46,12 +46,12 @@ total <- mutate(total, current=confirmed-deaths-recovered)
 perth <- filter(total, `Province/State` == "Western Australia" & `Country/Region` == "Australia")
 perth <- select(perth, Date, current, deaths, recovered)
 perth.xts <- xts(select(perth, current, deaths, recovered), order.by=perth$Date)
-dygraph(perth.xts) %>% dyHighlight() %>%
+dygraph(perth.xts) %>% dyHighlight() %>% dyOptions(stackedGraph=T) %>%
   dyEvent("2020-3-10", "COVID clinic RPH, SCGH, FSH", labelLoc="bottom") %>%
   dyEvent("2020-3-18", "Indoor gatherings banned", labelLoc="bottom") %>%
   dyEvent("2020-3-19", "COVID clinic Bunbury; Aus border closure", labelLoc="bottom")
 ```
-```
+
 
 ### Current cases in Australia
 ```{r}
