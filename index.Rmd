@@ -3,11 +3,9 @@ title: "COVID-19 cases in Australia"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    vertical_layout: fill
 ---
 
-An illustration of the number of current COVID-19 cases in Australia,
-with a focus on Western Australia. Data from Johns Hopkins University, CSSE.
+An illustration of the number of current COVID-19 cases in Australia. Data from Johns Hopkins University, CSSE.
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
