@@ -57,14 +57,16 @@ ACT
 ```{r}
 plot_for_state(total, "Australian Capital Territory")
 ```
+
 NSW
 ================================
+
 ### New South Wales
 
 ```{r}
 plot_for_state(total, "New South Wales")
 ```
-ACT
+ ACT
 ================================
 ### Northern Territory
 
