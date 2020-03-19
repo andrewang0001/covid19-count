@@ -1,0 +1,63 @@
+---
+title: "COVID-19 cases in Australia with a focus on Western Australia"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+An illustration of the number of current COVID-19 cases in Australia,
+with a focus on Western Australia. Data from Johns Hopkins University, CSSE.
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dygraphs)
+library(xts)
+library(tidyverse)
+
+load_dat <- function(filename, order.by.col="Date", comment="#") {
+  dat <- read_csv(filename, comment=comment)
+  #xts(dat, dat[[order.by.col]])
+}
+
+confirmed <- load_dat("data/time_series-ncov-Confirmed.csv")
+confirmed <- confirmed %>% rename(confirmed = Value)
+deaths <- load_dat("data/time_series-ncov-Deaths.csv")
+deaths <- deaths %>% rename(deaths = Value)
+recovered <- load_dat("data/time_series-ncov-Recovered.csv")
+recovered <- recovered %>% rename(recovered = Value)
+
+# Join the tables.
+join.by <- c("Province/State", "Country/Region", "Lat", "Long", "Date")
+total <- full_join(confirmed, deaths, suffix=c("confirmed", "deaths"), by=join.by)
+total <- full_join(total, recovered, suffix=c("", "recovered"), by=join.by)
+
+# Calculate the total number of current cases at a particular date
+total <- mutate(total, current=confirmed-deaths-recovered)
+#total.xts <- xts(total, order.by=total$Date)
+```
+
+-----------------------------------------------------------------------
+
+### Cases in Western Australia
+
+```{r}
+# WA cases
+perth <- filter(total, `Province/State` == "Western Australia" & `Country/Region` == "Australia")
+perth <- select(perth, Date, current, deaths, recovered)
+perth.xts <- xts(select(perth, current, deaths, recovered), order.by=perth$Date)
+dygraph(perth.xts) %>% dyHighlight() %>%
+  dyEvent("2020-3-10", "COVID clinic RPH, SCGH, FSH", labelLoc="bottom") %>%
+  dyEvent("2020-3-18", "Indoor gatherings banned", labelLoc="bottom") %>%
+  dyEvent("2020-3-19", "COVID clinic Bunbury; Aus border closure", labelLoc="bottom")
+```
+```
+
+### Current cases in Australia
+```{r}
+australia <- filter(total, `Country/Region`=="Australia")
+australia <- select(australia, Date, `Province/State`, current)
+australia <- spread(australia, `Province/State`, current)
+australia.xts <- xts(australia[, -1], order.by=australia$Date)
+dygraph(australia.xts) %>% dyOptions(stackedGraph=T) %>% dyHighlight()
+```
