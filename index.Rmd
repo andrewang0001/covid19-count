@@ -1,5 +1,5 @@
 ---
-title: "COVID-19 cases in Australia with a focus on Western Australia"
+title: "COVID-19 cases in Australia"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -66,7 +66,8 @@ NSW
 ```{r}
 plot_for_state(total, "New South Wales")
 ```
- ACT
+
+NT
 ================================
 ### Northern Territory
 
