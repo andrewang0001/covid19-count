@@ -44,6 +44,7 @@ plot_for_state <- function(total, province) {
   dat.xts <- xts(select(dat, current,deaths,recovered), order.by=dat$Date)
   dygraph_settings(dat.xts)
 }
+
 ```
 
 -----------------------------------------------------------------------
