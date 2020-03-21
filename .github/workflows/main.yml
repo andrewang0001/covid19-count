@@ -103,9 +103,6 @@ jobs:
         run: |
           R -e "rmarkdown::render('index.Rmd', output_file='index.html')"
           
-      - uses: actions/checkout@v2
-        with:
-          ref: 'master'
           
       - name: uploadSite
         run: |
@@ -118,6 +115,7 @@ jobs:
         uses: ad-m/github-push-action@master
         with: 
           github_token: ${{secrets.GITHUB_TOKEN}}
+          branch: master
         
           
       
