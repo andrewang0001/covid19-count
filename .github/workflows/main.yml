@@ -87,15 +87,17 @@ jobs:
           path: ${{env.R_LIBS_USER}}
           key: ${{runner.os}}-r-packages-${{hashFiles('depends.Rds')}}
           restore-keys: ${{runner.os}}-r-packages-
+      
+      - name: installcurl
+        run: |
+          sudo apt install libcurl4-openssl-dev
           
       - name: install dependencies
         run: |
           install.packages(c('flexdashboard', 'dygraphs', 'xts', 'tidyverse', 'rmarkdown'))
         shell: Rscript {0}
-      - uses: actions/checkout@v2
-        with:
-          ref: 'code'
-      - uses: r-lib/actions/setup-r@master
+        
+      
 
       - name: setupSite
         run: |
