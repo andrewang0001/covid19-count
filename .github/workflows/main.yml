@@ -109,7 +109,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add index.html
-          git commit -m "Updated website with new data" -a
+          git commit -m "Updated website with new data"
           
       - name: Push changes
         uses: ad-m/github-push-action@master
