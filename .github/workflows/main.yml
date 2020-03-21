@@ -69,7 +69,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@master
-        
+     
+      
+      - name: cache dependencies
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-R-packages
+        with:
+          path: ${{env.R_LIBS_USER}}
+          key: ${{runner.os}}-r-packages
+          restore-keys: ${{runner.os}}-r
+          
       - name: install dependencies
         run: |
           install.packages(c('flexdashboard', 'dygraphs', 'xts', 'tidyverse', 'rmarkdown'))
