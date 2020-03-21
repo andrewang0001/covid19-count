@@ -69,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: 'code'
+          ref: 'code'
       - uses: r-lib/actions/setup-r@master
       - uses: r-lib/actions/setup-pandoc@master
      
