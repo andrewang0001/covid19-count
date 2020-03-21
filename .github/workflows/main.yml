@@ -74,7 +74,7 @@ jobs:
       - name: query dependencies
         run: |
           pack <- available.packages()
-          saveRDS(pack[c("flexdashboard", "dygraphs", "xts", "tidyverse", "rmarkdown"),] "depends.Rds")
+          saveRDS(pack[c("flexdashboard", "dygraphs", "xts", "tidyverse", "rmarkdown"),], "depends.Rds")
         shell: Rscript {0}
           
       - name: cache dependencies
