@@ -67,8 +67,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: 'code'
       - uses: r-lib/actions/setup-r@master
       - uses: r-lib/actions/setup-pandoc@master
      
@@ -89,7 +87,7 @@ jobs:
       
       - name: installcurl
         run: |
-          sudo apt install libcurl4-openssl-dev
+          sudo apt-get install libcurl4-openssl-dev
           
       - name: install dependencies
         run: |
@@ -100,6 +98,7 @@ jobs:
 
       - name: setupSite
         run: |
+          getpwd
           R -e "rmarkdown::render('index.Rmd', output_file='docs/index.html')"
           
           
@@ -107,7 +106,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
-          git add index.html
+          git add docs/index.html
           git commit -m "Updated website with new data"
           
       - name: Push changes
