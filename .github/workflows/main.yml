@@ -98,7 +98,6 @@ jobs:
 
       - name: setupSite
         run: |
-          getpwd
           R -e "rmarkdown::render('index.Rmd', output_file='docs/index.html')"
           
           
