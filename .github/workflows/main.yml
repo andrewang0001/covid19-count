@@ -27,40 +27,47 @@ jobs:
         pwd
         ls
         
-    - name: download confirmed data
+    - name: download recovered data
       uses: wei/curl@v1.1.1
       with:
-        args: -v -o ./data/time_series-ncov-Recovered.csv "$URL"
+        args: -v -o time_series-ncov-Recovered.csv "$URL"
       env:
         URL: "https://data.humdata.org/hxlproxy/data/download/time_series-ncov-Recovered.csv?dest=data_edit&filter01=explode&explode-header-att01=date&explode-value-att01=value&filter02=rename&rename-oldtag02=%23affected%2Bdate&rename-newtag02=%23date&rename-header02=Date&filter03=rename&rename-oldtag03=%23affected%2Bvalue&rename-newtag03=%23affected%2Brecovered%2Bvalue%2Bnum&rename-header03=Value&filter04=clean&clean-date-tags04=%23date&filter05=sort&sort-tags05=%23date&sort-reverse05=on&filter06=sort&sort-tags06=%23country%2Bname%2C%23adm1%2Bname&tagger-match-all=on&tagger-default-tag=%23affected%2Blabel&tagger-01-header=province%2Fstate&tagger-01-tag=%23adm1%2Bname&tagger-02-header=country%2Fregion&tagger-02-tag=%23country%2Bname&tagger-03-header=lat&tagger-03-tag=%23geo%2Blat&tagger-04-header=long&tagger-04-tag=%23geo%2Blon&header-row=1&url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_19-covid-Recovered.csv" 
    
+
+     
     - name: download death data
       uses: wei/curl@v1.1.1
       with:
-        args: -v -o ./data/time_series-ncov-Deaths.csv "$URL"
+        args: -v -o time_series-ncov-Deaths.csv "$URL"
       env:
         URL: "https://data.humdata.org/hxlproxy/data/download/time_series-ncov-Deaths.csv?dest=data_edit&filter01=explode&explode-header-att01=date&explode-value-att01=value&filter02=rename&rename-oldtag02=%23affected%2Bdate&rename-newtag02=%23date&rename-header02=Date&filter03=rename&rename-oldtag03=%23affected%2Bvalue&rename-newtag03=%23affected%2Bkilled%2Bvalue%2Bnum&rename-header03=Value&filter04=clean&clean-date-tags04=%23date&filter05=sort&sort-tags05=%23date&sort-reverse05=on&filter06=sort&sort-tags06=%23country%2Bname%2C%23adm1%2Bname&tagger-match-all=on&tagger-default-tag=%23affected%2Blabel&tagger-01-header=province%2Fstate&tagger-01-tag=%23adm1%2Bname&tagger-02-header=country%2Fregion&tagger-02-tag=%23country%2Bname&tagger-03-header=lat&tagger-03-tag=%23geo%2Blat&tagger-04-header=long&tagger-04-tag=%23geo%2Blon&header-row=1&url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_19-covid-Deaths.csv"  
         
     - name: download confirmed data
       uses: wei/curl@v1.1.1
       with:
-        args: -v -o ./data/time_series-ncov-Confirmed.csv "$URL"
+        args: -v -o time_series-ncov-Confirmed.csv "$URL"
       env:
         URL: "https://data.humdata.org/hxlproxy/data/download/time_series-ncov-Confirmed.csv?dest=data_edit&filter01=explode&explode-header-att01=date&explode-value-att01=value&filter02=rename&rename-oldtag02=%23affected%2Bdate&rename-newtag02=%23date&rename-header02=Date&filter03=rename&rename-oldtag03=%23affected%2Bvalue&rename-newtag03=%23affected%2Binfected%2Bvalue%2Bnum&rename-header03=Value&filter04=clean&clean-date-tags04=%23date&filter05=sort&sort-tags05=%23date&sort-reverse05=on&filter06=sort&sort-tags06=%23country%2Bname%2C%23adm1%2Bname&tagger-match-all=on&tagger-default-tag=%23affected%2Blabel&tagger-01-header=province%2Fstate&tagger-01-tag=%23adm1%2Bname&tagger-02-header=country%2Fregion&tagger-02-tag=%23country%2Bname&tagger-03-header=lat&tagger-03-tag=%23geo%2Blat&tagger-04-header=long&tagger-04-tag=%23geo%2Blon&header-row=1&url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_19-covid-Confirmed.csv"
 
-    - name: commit download
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "Github Action"
-        GIT_TRACE=1 git add ./data/*.csv
-        git commit -m "Update data ..." -a
+    - name: upload death data
+      uses: actions/upload-artifact@v1
+      with:
+        name: data
+        path: time_series-ncov-Deaths.csv
         
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with: 
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        force: true
-      
+    - name: upload confirmed data
+      uses: actions/upload-artifact@v1
+      with:
+        name: data
+        path: time_series-ncov-Recovered.csv
+
+    - name: upload recovered data
+      uses: actions/upload-artifact@v1
+      with:
+        name: data
+        path: time_series-ncov-Recovered.csv
+
   setupR:
     runs-on: ubuntu-latest
     needs: downloadfiles
@@ -93,7 +100,10 @@ jobs:
           install.packages(c('flexdashboard', 'dygraphs', 'xts', 'tidyverse', 'rmarkdown'))
         shell: Rscript {0}
         
-      
+      - name: download data
+        uses: actions/download-artifact@v1
+        with:
+          name: data
 
       - name: setupSite
         run: |
